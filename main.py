@@ -50,11 +50,11 @@ st.markdown("""
         text-align: center;
         border-bottom: 1px solid rgba(255,255,255,0.1);
         position: fixed;
-        top: 30px;  /* Default position for larger screens */
+        top: 30px;
         left: 0;
         right: 0;
         z-index: 1000;
-        transition: all 0.3s ease;  /* Smooth transition for responsiveness */
+        transition: all 0.3s ease;
     }
 
     .header-content {
@@ -66,7 +66,7 @@ st.markdown("""
     .chat-container {
         flex-grow: 1;
         overflow-y: auto;
-        padding: 110px 20px 100px;  /* Adjusted padding for header */
+        padding: 110px 20px 100px;
         margin: 0 auto;
         max-width: 800px;
         width: 100%;
@@ -140,7 +140,7 @@ st.markdown("""
     /* Responsive design */
     @media (max-width: 768px) {
         .header {
-            top: 20px;  /* Slightly lower for tablets */
+            top: 20px;
             padding: 0.8rem;
         }
         .header h1 {
@@ -159,7 +159,7 @@ st.markdown("""
 
     @media (max-width: 480px) {
         .header {
-            top: 40px;  /* Moved further down for mobile view */
+            top: 40px;
             padding: 0.5rem;
         }
         .header h1 {
@@ -170,7 +170,7 @@ st.markdown("""
             margin-top: 0.2rem !important;
         }
         .chat-container {
-            padding: 80px 5px 70px;  /* Adjusted padding for mobile */
+            padding: 80px 5px 70px;
         }
         .input-container {
             padding: 0.3rem;

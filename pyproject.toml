@@ -15,4 +15,7 @@ dependencies = [
     "gtts>=2.5.4",
     "numpy>=1.24.0",
     "pandas>=2.2.3",
+]
+
+[project.URLs]
 Homepage = "https://github.com/Riaz-Hussain-Saifi/Python-Chat-Bot"
