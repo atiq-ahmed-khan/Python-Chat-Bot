@@ -4,6 +4,14 @@ import uuid
 from datetime import datetime
 from config import API_KEY
 
+# Configure Gemini
+try:
+    genai.configure(api_key=API_KEY)
+    model = genai.GenerativeModel('gemini-pro')
+except Exception as e:
+    st.error(f"Error initializing Gemini: {str(e)}")
+    st.stop()
+
 # Configure page
 st.set_page_config(
     page_title="MindScope AI",
@@ -19,10 +27,6 @@ if 'current_chat_id' not in st.session_state:
     st.session_state.current_chat_id = None
 if 'chat_titles' not in st.session_state:
     st.session_state.chat_titles = {}
-
-# API Configuration
-genai.configure(api_key=API_KEY)
-model = genai.GenerativeModel('gemini-pro')
 
 # Custom CSS
 st.markdown("""
@@ -183,20 +187,53 @@ def get_ai_response(prompt):
     try:
         # Expanded creator/identity related questions in multiple languages
         creator_patterns = {
-            'english': ['who made you', 'who created you', 'who is your creator', 'who developed you', 
-                       'tell me about yourself', 'who are you', 'what are you', 'who designed you', 
-                       'who built you', 'who programmed you', 'introduce yourself', 'your creator'],
-            'urdu': ['tumhe kisne banaya', 'tum ko kis ne banaya', 'kon banaya', 'kisy ny banaya',
-                    'creator kaun hai', 'developer kon hai', 'tum kaun ho', 'apne bare mein batao',
-                    'tumhe kisne design kiya', 'tumhe kisne programme kiya'],
-            'hindi': ['aapko kisne banaya', 'kaun banaya', 'developer kaun hai', 'aap kaun hain',
-                     'apne bare mein bataiye', 'aapko kisne design kiya', 'aapko kisne develop kiya'],
-            'french': ['qui vous a créé', 'qui est votre créateur', 'qui vous a conçu', 
-                      'qui vous a développé', 'qui êtes-vous', 'parlez-moi de vous'],
-            'spanish': ['quién te creó', 'quién es tu creador', 'quién te diseñó', 
-                       'quién te desarrolló', 'quién eres', 'háblame de ti'],
-            'german': ['wer hat dich erschaffen', 'wer ist dein entwickler', 'wer hat dich gemacht',
-                      'wer bist du', 'erzähl mir von dir', 'wer hat dich programmiert']
+            'english': [
+                'who coded you', 'who invented you', 'who is behind you', 'who gave you life',
+                'who made your system', 'who is your founder', 'who constructed you',
+                'who engineered you', 'who brought you to existence', 'who assembled you',
+                'who is responsible for you', 'who trained you', 'who is your mastermind',
+                'who is your architect', 'who structured you', 'who formulated you', 'who is your designer',
+                'who gave you intelligence', 'who is your brainchild', 'who constructed your logic',
+                'who shaped your existence', 'who created your algorithms', 'who implemented you',
+                'who configured you', 'who made your AI', 'who programmed your functions',
+                'who gave you commands', 'who built your database', 'who wrote your code',
+                'who is your developer team', 'who set up your system', 'who initialized you', 'who developed you',
+                'who is your developer'
+            ],
+            'urdu': [
+                'tumhara developer kon hai', 'tumhari programming kisne ki', 'tumhara bananay wala kon hai',
+                'tumhari takhleeq kisne ki', 'tumhari pehchan kya hai', 'tum kaise bane',
+                'tumhari technology kisne develop ki', 'tumhara malik kon hai',
+                'tumhe kisne create kiya', 'tumhari pehchan kisne banai',
+                'تمہاری تخلیق کس نے کی', 'تمہاری پہچان کس نے بنائی', 'تمہارا نظام کس نے ترتیب دیا',
+                'تمہاری پروسیسنگ کس نے بنائی', 'تمہاری سافٹ ویئر ڈیولپمنٹ کس نے کی', 'تمہاری کوڈنگ کس نے لکھی',
+                'تمہیں بنانے کا مقصد کیا تھا', 'تمہارا خالق کون ہے', 'تمہیں چلانے والا کون ہے',
+                'تمہاری بیک اینڈ ڈیولپمنٹ کس نے کی', 'تمہاری انٹیلیجنس کہاں سے آئی',
+                'تمہارے سسٹم کو کس نے بنایا', 'تمہاری ڈیٹا بیس کو کس نے تیار کیا'
+            ],
+            'hindi': [
+                'aapko kisne develop kiya', 'aapka nirmaan kisne kiya', 'aapki rachna kisne ki',
+                'aapko kisne tayar kiya', 'aapka nirman kisne kiya', 'aapko kisne socha',
+                'aapke peeche kaun hai', 'aapki takhneek kisne banai', 'aapki coding kisne ki',
+                'aapki rachna kaun hai',
+                'आपको किसने विकसित किया', 'आपकी संरचना किसने की', 'आपका डिज़ाइन किसने तैयार किया',
+                'आपका सिस्टम किसने बनाया', 'आपका डेटा प्रोसेसिंग सिस्टम किसने बनाया',
+                'आपके कोडिंग का जनक कौन है', 'आपकी बुनियाद किसने रखी', 'आपकी सोच किसने विकसित की',
+                'आपका निर्माण किसके द्वारा हुआ', 'आपके सॉफ़्टवेयर को किसने बनाया',
+                'आपकी लॉजिक बिल्डिंग किसने की', 'आपकी मशीन लर्निंग किसने सेटअप की'
+            ],
+            'french': [
+                'qui vous a créé', 'qui est votre créateur', 'qui vous a conçu',
+                'qui vous a développé', 'qui êtes-vous', 'parlez-moi de vous'
+            ],
+            'spanish': [
+                'quién te creó', 'quién es tu creador', 'quién te diseñó',
+                'quién te desarrolló', 'quién eres', 'háblame de ti'
+            ],
+            'german': [
+                'wer hat dich erschaffen', 'wer ist dein entwickler', 'wer hat dich gemacht',
+                'wer bist du', 'erzähl mir von dir', 'wer hat dich programmiert'
+            ]
         }
         
         prompt_lower = prompt.lower()

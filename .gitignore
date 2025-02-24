@@ -24,8 +24,11 @@ wheels/
 .installed.cfg
 *.egg
 
+# Configuration
+config.py
+
 # Environment
-#.env
+.env
 .venv
 env/
 venv/
